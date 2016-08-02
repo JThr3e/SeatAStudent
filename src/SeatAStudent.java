@@ -16,7 +16,7 @@ public class SeatAStudent {
 	public static final double MUTATION_CHANCE = 0.8;
 	public static final double CROSSOVER_CHANCE = 0.8;
 	public static final int ELITES = 2;
-	public static final int AEONS = 10;
+	public static final int AEONS = 20;
 	public static final String CHART_FNAME = "chart4.txt";
 	public static final String STUDENTS_FNAME = "students.txt";
 	public static final String SUBGROUP_FNAME = "subchart2.txt";
