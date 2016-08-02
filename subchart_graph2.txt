@@ -1,0 +1,6 @@
+AB
+BAC
+CBDE
+DCF
+ECF
+FDE

@@ -34,6 +34,11 @@ public class Edge<T>{
 		return this.weight;
 	}
 	
+	public void setWeight(int w)
+	{
+		this.weight = w;
+	}
+	
 	public int compareTo(Edge<T> that) {
 		return this.weight-that.weight;
 	}

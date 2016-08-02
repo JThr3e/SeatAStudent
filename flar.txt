@@ -1,0 +1,9 @@
+#[STUDENT SEATING PREFRENCES] -> NAME THIS FILE YOUR NAME AS IT APPEARS ON THE LIST
+#Students I Would Like to Sit Next to(Use names that are included on the list):
+rae
+grim
+will
+chen
+#Students I Would Reeeaallly Perfer Not to Sit Next to:
+sara
+#Window Seat(put either yes, no, or idc):

@@ -2,7 +2,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Scanner;
 
-public class SeatAStudent {
+public class SeatAStudentNoML {
 	
 	public static void main(String[] idc)
 	{
@@ -104,7 +104,7 @@ public class SeatAStudent {
 		//...TEST/DEBUG...//
 		
 		//...TEST/DEBUG...//
-		//gr.addEdge(new Edge<String>(new Vertex<String>("Joseph"), new Vertex<String>("Michael"), 1));
+		desired.removeVertex(new Vertex<String>("Joseph"));
 		System.out.println(desired.getAllEdges());
 		//...TEST/DEBUG...//
 		
@@ -120,7 +120,7 @@ public class SeatAStudent {
 		HashSet<Graph<String>> linearDesire = new HashSet<Graph<String>>();
 		HashSet<Vertex<String>> tempVerticies = new HashSet<Vertex<String>>();
 		tempVerticies.addAll(desired.getAllVerticies());
-		for(Vertex v : desired.getAllVerticies())
+		for(Vertex<String> v : tempVerticies)
 		{
 			
 		}
