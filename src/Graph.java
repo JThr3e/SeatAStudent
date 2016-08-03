@@ -51,14 +51,14 @@ public class Graph<T>{
 		
 		for(Vertex<T> v : this.verticies)
 		{
-			System.out.println(v);
+			//System.out.println(v);
 			for(Edge<T> edge : edges)
 			{
 				if(edge.getVerticies().get(0).equals(v) && edge.getWeight() == 0)
 				{
 					v.addOneWayNeighbor(edge.getVerticies().get(Math.abs(edge.getVerticies().indexOf(v)-1)));
 					v.addToAllNeighbor(edge.getVerticies().get(Math.abs(edge.getVerticies().indexOf(v)-1)));
-					System.out.println("W0: "+edge);
+					//System.out.println("W0: "+edge);
 				}
 			}
 			for(Edge<T> edge : edges)
@@ -67,10 +67,10 @@ public class Graph<T>{
 				{
 					v.addTwoWayNeighbor(edge.getVerticies().get(Math.abs(edge.getVerticies().indexOf(v)-1)));
 					v.addToAllNeighbor(edge.getVerticies().get(Math.abs(edge.getVerticies().indexOf(v)-1)));
-					System.out.println("W1: "+edge);
+					//System.out.println("W1: "+edge);
 				}
 			}
-			System.out.println("W2: "+v.getNotNextTo());
+			//System.out.println("W2: "+v.getNotNextTo());
 		}
 		this.neighborFindV.addAll(verticies);
 	}

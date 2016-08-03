@@ -5,18 +5,13 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class SeatAStudent {
-	
-	//public static final String allStudents = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,a,b,c,d";
-	//public static final String wanted = "AXSUM,BSL,CFBW,DYPac,ERQd,FWUG,GFVW,HQBN,IFBC,JWQ,KJS,LYUO,MLUC,NER,OVUC,PIYA,QWJU,RCSK,SLG,TRXP,UCD,VAR,WUNM,UIVM,XOI,YEIB,ZRXU,abc,bcd,ca,dAD";
-	//public static final String allStudents = "A,B,C,D,E";
-	//public static final String wanted =	"ABDC,BA,CE,D,E";
 			
 	public static final int POPULATION_SIZE = 400;
 	public static final int GENERATIONS_NO_CHANGE = 200;
 	public static final double MUTATION_CHANCE = 0.8;
 	public static final double CROSSOVER_CHANCE = 0.8;
 	public static final int ELITES = 2;
-	public static final int AEONS = 20;
+	public static final int AEONS = 5;
 	public static final String CHART_FNAME = "chart4.txt";
 	public static final String STUDENTS_FNAME = "students.txt";
 	public static final String SUBGROUP_FNAME = "subchart2.txt";
@@ -34,32 +29,47 @@ public class SeatAStudent {
 	public static void main(String[] argz)
 	{
 		long startTime = System.currentTimeMillis();
+		ScrollPaneUtil.createUI();
+		ScrollPaneUtil.updateOutput("Operation started "+startTime+" milliseconds after the epoch.");
 		ArrayList<Chromosome> bestODaBest = new ArrayList<Chromosome>();
+		ScrollPaneUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: Initializing graphs and maps");
 		initGraphs();
 		String[] students = new String[desired.getAllVerticies().size()];
 		for(int i = 0; i < desired.size(); i++){
 			students[i] = desired.getAllVerticies2FindNeighbors().get(i).getData()+"";
 		}
-		
+		ScrollPaneUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: done");
+		ScrollPaneUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: Beginning evolutionary simulation"
+				+ "(This takes a while)...");
 		for(int ae = 0; ae < AEONS; ae++)
 		{
 			Chromosome c = runAeon(initPopulation(students), ae);
 			Chromosome omega = runPermutate(c);
-			System.out.println("[AEON "+(ae+1)+"]: [Fitness: " + omega.getFitnessScore()+"], "+omega.getGenes().toString());
+			System.out.println("[AEON "+(ae+1)+"]: [Fitness: " + omega.getFitnessScore()+"], "+
+					omega.getGenes().toString());
 			System.out.println(FitnessUtil.getSubScoreArrayList(omega.getGenes()));
 			System.out.println();
-			//System.out.println("[AEON "+(ae+1)+"]: [Fitness: " + c.getFitnessScore()+"], "+c.getGenes().toString());
-			//System.out.println(FitnessUtil.getSubScoreArrayList(c.getGenes()));
-			//System.out.println();
+			ScrollPaneUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: [AEON "+(ae+1)+
+					"]~~~[Fitness: " + omega.getFitnessScore()+"]:<br>"+omega.getGenes().toString());
+			ScrollPaneUtil.updateOutput(FitnessUtil.getSubScoreArrayList(omega.getGenes()).toString()+"<br>");
 			bestODaBest.add(omega);
 		}
 		Collections.sort(bestODaBest);
-		System.out.println(bestODaBest.get(0).getGenes().toString()+" fitness: "+ bestODaBest.get(0).getFitnessScore());
+		System.out.println(bestODaBest.get(0).getGenes().toString()+" fitness: "+ bestODaBest.get(0).
+				getFitnessScore());
 		System.out.println("[OUTCOME]: "+FitnessUtil.getSubScoreArrayList(bestODaBest.get(0).getGenes()));
+		
+		
+		ScrollPaneUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: Here's the best result I could find: <br>"
+				+bestODaBest.get(0).getGenes().toString());
+		ScrollPaneUtil.updateOutput("Fitness Info:");
+		ScrollPaneUtil.updateOutput(FitnessUtil.getSubScoreArrayList(bestODaBest.get(0).getGenes()).toString());
+		ScrollPaneUtil.updateOutput("[Final Fitness Score]: "+ bestODaBest.get(0).getFitnessScore());
+		
 		long stopTime = System.currentTimeMillis();
 		System.out.println("Operation took "+((stopTime-startTime)/1000L)+" seconds.");
-		//Chromosome c = runAeon(bestODaBest, -1000);
-		//System.out.println(c.getGenes().toString()+" fitness: "+c.getFitnessScore());
+		ScrollPaneUtil.updateOutput("Operation took "+((stopTime-startTime)+" milliseconds"));
+		ScrollPaneUtil.updateOutput("Operation ended " + stopTime + " milliseconds after the epoch");
 	}
 	
 	public static Chromosome runPermutate(Chromosome c)
@@ -123,11 +133,12 @@ public class SeatAStudent {
 	
 	public static Chromosome runAeon(ArrayList<Chromosome> population, int ae)
 	{
-		//int k = 0;
+		int k = 0;
 		int i = 0;
 		String prev = "";
 		while (i < GENERATIONS_NO_CHANGE) { 
 			//System.out.print("[AEON "+ae+"][no change for " + i + " generations] gen: " + k);
+			//ScrollPaneUtil.updateOutput("[AEON "+ae+"][no change for " + i + " generations] gen: " + k);
 			Collections.sort(population);
 
 			ArrayList<Chromosome> temp = new ArrayList<Chromosome>();
@@ -159,12 +170,13 @@ public class SeatAStudent {
 			population.clear();
 			population.addAll(temp);
 			//System.out.println(population.get(0).getGenes().toString() + " fitness: " + population.get(0).getFitnessScore());
+			//ScrollPaneUtil.updateOutput(population.get(0).getGenes().toString() + " fitness: " + population.get(0).getFitnessScore());
 			if (!prev.equals(population.get(0).getGenes().toString()))
 				i = 0;
 			else
 				i++;
 			prev = population.get(0).getGenes().toString();
-			//k++;
+			k++;
 		}
 		return population.get(0);
 	}
