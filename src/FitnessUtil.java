@@ -4,12 +4,6 @@ import java.util.HashSet;
 
 public class FitnessUtil {
 	
-	/*WIEGHTES*/
-
-	private static final int NEXT2WINDOW_DONT_WANT = 4;
-	private static final int NEXT2WINDOW_DO_WANT = 1;
-	
-	
 	//////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////
 	private static int calcSubScore(int i, ArrayList<String> chromo, HashMap<String, Integer> indexMap)
@@ -24,7 +18,6 @@ public class FitnessUtil {
 	    
 		if(chromo.get(i).toLowerCase().contains("emptyseat"))
 		{
-			//System.out.println(SAS.NO_PREF);
 			return SAS.NO_PREF;
 		}
 		else{
@@ -58,10 +51,7 @@ public class FitnessUtil {
 		    		}	
 		    	}
 		    	
-		    	
 		    }
-		    
-		    
 		    boolean hasFriend = false;
 			for(Vertex<Integer> n : viableNeighbors)
 			{
@@ -89,7 +79,6 @@ public class FitnessUtil {
 			
 			return subScore;
 		}
-	    
 	}
 	////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////

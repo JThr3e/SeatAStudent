@@ -72,11 +72,4 @@ public class Chromosome implements Comparable<Chromosome>{
 	public int compareTo(Chromosome c) {
 		return c.fitnessScore - this.fitnessScore;
 	}
-	
-	
-	
-	
-	
-	
-
 }

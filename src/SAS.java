@@ -27,17 +27,6 @@ public class SAS {
 	public static int IN_WANT_GROUP = 0;
 	public static int IN_NOT_WANT_GROUP = 0;
 	
-	/*
-	 * public static int SAME_GROUP_AS_ENEMY = 8;
-	public static int NEXT_GROUP_HAS_ENEMY = 2;
-	public static int NEXT_TO_FRIEND = 1;
-	public static int NEXT_TO_2WFRIEND = 2;
-	public static int NO_PREF = 2;
-	public static int NOT_NO_PREF = 4;
-	public static int NEXT2WINDOW_DONT_WANT = 4;
-	public static int NEXT2WINDOW_DO_WANT = 1;
-	 */
-	
 	public static String isolateGoodStuff(String str)
 	{
 		String ret = "";
@@ -61,7 +50,6 @@ public class SAS {
 	{
 		String studentFile = JOptionPane.showInputDialog("Please input the file that contains the names of the students:");
 		STUDENTS_FNAME = studentFile;
-		//int i = 0;
 		try {
 			Scanner file = new Scanner(new File("config.txt"));
 			while (file.hasNextLine()) {
@@ -74,7 +62,6 @@ public class SAS {
 				else if(s.charAt(0) == '#')
 				{
 					/*do more nothing*/
-					
 				}
 				else{
 					if(s.contains("AEONS")){
@@ -114,7 +101,6 @@ public class SAS {
 						SUBGROUP_GRAPH_FNAME  = isolateGoodStuff(s);
 						System.out.println("SUBGROUP_GRAPH_FNAME");
 					}
-					//if(s.contains("DONT_LET_THESE_PEOPLE_BE_TOGETHER_FNAME ")) DONT_LET_THESE_PEOPLE_BE_TOGETHER_FNAME  = isolateGoodStuff(s);
 					
 					if(s.contains("NEXT_TO_FRIEND")){
 						NEXT_TO_FRIEND  = Integer.parseInt(isolateGoodStuff(s));
@@ -152,9 +138,6 @@ public class SAS {
 						IN_NOT_WANT_GROUP  = Integer.parseInt(isolateGoodStuff(s));
 						System.out.println("IN_NOT_WANT_GROUP");
 					}
-					//if(s.contains("PREF_GROUP ")) PREF_GROUP  = isolateGoodStuff(s);
-					//if(s.contains("GROUP_DONT_WANT ")) GROUP_DONT_WANT  = Integer.parseInt(isolateGoodStuff(s));
-					//if(s.contains("GROUP_DO_WANT ")) GROUP_DO_WANT  = Integer.parseInt(isolateGoodStuff(s));
 				}
 			}
 			file.close();

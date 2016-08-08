@@ -354,6 +354,7 @@ public class SeatAStudent {
 		return new Chromosome(retChromo, indexMap);
 	}
 	
+	@SuppressWarnings("unchecked") 
 	public static ArrayList<Chromosome> haveSex(List<Chromosome> parents)
 	{
 		ArrayList<String> p1 = (ArrayList<String>)parents.get(0).getGenes().clone();

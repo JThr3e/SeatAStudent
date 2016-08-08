@@ -56,7 +56,6 @@ public class UIUtil {
 	public static void createUI(){
 		frame.setTitle("SEAT A STUDENT");
 		textpane.setFont(new Font("Arial", Font.BOLD, 30));
-		//textpane.setVerticalAlignment(SwingConstants.TOP);
 	    jscr.setVisible(true);
 	    frame.add(jscr);
 	    frame.setVisible(true);
@@ -77,11 +76,4 @@ public class UIUtil {
 	{
 		JOptionPane.showMessageDialog(null, str);
 	}
-	
-	
-	
-	
-	
-	
-
 }
