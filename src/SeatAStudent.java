@@ -2,26 +2,31 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
+
+import javax.swing.JOptionPane;
 
 public class SeatAStudent {
 			
-	public static final int POPULATION_SIZE = 400;
-	public static final int GENERATIONS_NO_CHANGE = 200;
-	public static final double MUTATION_CHANCE = 0.8;
-	public static final double CROSSOVER_CHANCE = 0.8;
-	public static final int ELITES = 2;
-	public static final int AEONS = 5;
-	public static final String CHART_FNAME = "chart4.txt";
-	public static final String STUDENTS_FNAME = "students.txt";
-	public static final String SUBGROUP_FNAME = "subchart2.txt";
-	public static final String SUBGROUP_GRAPH_FNAME = "subchart_graph2.txt";
+	//public static final int SAS.POPULATION_SIZE = 400;
+	//public static final int SAS.GENERATIONS_NO_CHANGE = 200;
+	//public static final double SAS.MUTATION_CHANCE = 0.8;
+	//public static final double SAS.CROSSOVER_CHANCE = 0.8;
+	//public static final int SAS.ELITES = 2;
+	//public static final int SAS.AEONS = 5;
+	//public static final String SAS.CHART_FNAME = "chart.txt";
+	//public static final String SAS.STUDENTS_FNAME = "students.txt";
+	//public static final String SAS.SUBGROUP_FNAME = "subchart.txt";
+	//public static final String SAS.SUBGROUP_GRAPH_FNAME = "subchart_graph.txt";
 	
 	public static Graph<String> desired;
 	public static Graph<Integer> target;
 	public static Graph<String> subGraphs;
 	public static HashMap<String, String[]> groupToIndexArr;
 	public static HashMap<Integer, String> indexToGroup;
+	public static HashMap<String, Vertex<String>> strToVertDesired;
+	public static HashMap<Vertex<Integer>, Integer> vertToIntTarget;
 	
 	public static ArrayList<ArrayList<String>> permutationArray = new ArrayList<ArrayList<String>>();
 	
@@ -29,130 +34,74 @@ public class SeatAStudent {
 	public static void main(String[] argz)
 	{
 		long startTime = System.currentTimeMillis();
-		ScrollPaneUtil.createUI();
-		ScrollPaneUtil.updateOutput("Operation started "+startTime+" milliseconds after the epoch.");
+		UIUtil.changeJOP();
+		UIUtil.createUI();
+		UIUtil.updateOutput("[000ms]: Operation started "+startTime+" milliseconds after the epoch.");
 		ArrayList<Chromosome> bestODaBest = new ArrayList<Chromosome>();
-		ScrollPaneUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: Initializing graphs and maps");
+		UIUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: Initializing graphs, maps, and config");
+		SAS.readInAndInitConfig();
 		initGraphs();
 		String[] students = new String[desired.getAllVerticies().size()];
 		for(int i = 0; i < desired.size(); i++){
 			students[i] = desired.getAllVerticies2FindNeighbors().get(i).getData()+"";
 		}
-		ScrollPaneUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: done");
-		ScrollPaneUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: Beginning evolutionary simulation"
+		UIUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: done");
+		UIUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: Beginning evolutionary simulation"
 				+ "(This takes a while)...");
-		for(int ae = 0; ae < AEONS; ae++)
+		for(int ae = 0; ae < SAS.AEONS; ae++)
 		{
 			Chromosome c = runAeon(initPopulation(students), ae);
-			Chromosome omega = runPermutate(c);
-			System.out.println("[AEON "+(ae+1)+"]: [Fitness: " + omega.getFitnessScore()+"], "+
-					omega.getGenes().toString());
-			System.out.println(FitnessUtil.getSubScoreArrayList(omega.getGenes()));
+			System.out.println("[AEON "+(ae+1)+"]: [Fitness: " + c.getFitnessScore()+"], "+
+					c.getGenes().toString());
+			System.out.println(FitnessUtil.getSubScoreArrayList(c.getGenes(), c.getIndexMap()));
 			System.out.println();
-			ScrollPaneUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: [AEON "+(ae+1)+
-					"]~~~[Fitness: " + omega.getFitnessScore()+"]:<br>"+omega.getGenes().toString());
-			ScrollPaneUtil.updateOutput(FitnessUtil.getSubScoreArrayList(omega.getGenes()).toString()+"<br>");
-			bestODaBest.add(omega);
+			UIUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: [AEON "+(ae+1)+
+					"]~~~[Fitness: " + c.getFitnessScore()+"]:\n"+c.getGenes().toString());
+			UIUtil.updateOutput(FitnessUtil.getSubScoreArrayList(c.getGenes(), c.getIndexMap()).toString()+"\n");
+			bestODaBest.add(c);
 		}
 		Collections.sort(bestODaBest);
+		
 		System.out.println(bestODaBest.get(0).getGenes().toString()+" fitness: "+ bestODaBest.get(0).
 				getFitnessScore());
-		System.out.println("[OUTCOME]: "+FitnessUtil.getSubScoreArrayList(bestODaBest.get(0).getGenes()));
+		System.out.println("[OUTCOME]: "+FitnessUtil.getSubScoreArrayList(bestODaBest.get(0).getGenes(), bestODaBest.get(0).getIndexMap()));
 		
-		
-		ScrollPaneUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: Here's the best result I could find: <br>"
+		UIUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: Here's the best result I could find: \n"
 				+bestODaBest.get(0).getGenes().toString());
-		ScrollPaneUtil.updateOutput("Fitness Info:");
-		ScrollPaneUtil.updateOutput(FitnessUtil.getSubScoreArrayList(bestODaBest.get(0).getGenes()).toString());
-		ScrollPaneUtil.updateOutput("[Final Fitness Score]: "+ bestODaBest.get(0).getFitnessScore());
+		UIUtil.updateOutput("Fitness Info:");
+		UIUtil.updateOutput(FitnessUtil.getSubScoreArrayList(bestODaBest.get(0).getGenes(), bestODaBest.get(0).getIndexMap()).toString());
+		UIUtil.updateOutput("[Final Fitness Score]: "+ bestODaBest.get(0).getFitnessScore()+"\n");
 		
+		UIUtil.updateOutput("Seating chart for "+SAS.STUDENTS_FNAME+":");
+		for(int i = 0; i < bestODaBest.get(0).getGenes().size(); i++)
+		{
+			UIUtil.updateOutput("Seat "+(i+1)+": "+bestODaBest.get(0).getGenes().get(i));
+		}
+		UIUtil.updateOutput("");
 		long stopTime = System.currentTimeMillis();
 		System.out.println("Operation took "+((stopTime-startTime)/1000L)+" seconds.");
-		ScrollPaneUtil.updateOutput("Operation took "+((stopTime-startTime)+" milliseconds"));
-		ScrollPaneUtil.updateOutput("Operation ended " + stopTime + " milliseconds after the epoch");
-	}
-	
-	public static Chromosome runPermutate(Chromosome c)
-	{
-		ArrayList<Integer> scores = new ArrayList<Integer>();
-		ArrayList<Integer> indicies = new ArrayList<Integer>();
-		ArrayList<String> permuteThese = new ArrayList<String>();
-		ArrayList<Chromosome> permutated = new ArrayList<Chromosome>();
-		scores.addAll(FitnessUtil.getSubScoreArrayList(c.getGenes()));
-		for(int s = 0; s < scores.size(); s++)
-		{
-			if(scores.get(s) <= 0)
-			{
-				indicies.add(s);
-				permuteThese.add(c.getGenes().get(s));
-			}
-		}
-		permutation(permuteThese);
-		for(ArrayList<String> p : permutationArray)
-		{
-			ArrayList<String> chromo = new ArrayList<String>();
-			int prev = 0;
-			for(int i = 0; i < indicies.size(); i++)
-			{
-				chromo.addAll(c.getGenes().subList(prev, indicies.get(i)));
-				chromo.add(p.get(i));
-				prev = indicies.get(i)+1;
-			}
-			chromo.addAll(c.getGenes().subList(prev, c.getGenes().size()));
-			Chromosome perm = new Chromosome(chromo);
-			//System.out.println(perm.getGenes());
-			//System.out.println(FitnessUtil.fitnessOf(perm.getGenes()));
-			permutated.add(perm);
-		}
-		Collections.sort(permutated);
-		
-		return permutated.get(0);
-	}
-	
-	public static void permutation(ArrayList<String> str) { 
-		permutationArray.clear();
-	    permutation(new ArrayList<String>(), str); 
-	}
-
-	private static void permutation(ArrayList<String> prefix, ArrayList<String> str) {
-	    int n = str.size();
-	    if (n == 0) permutationArray.add(prefix);
-	    else {
-	        for (int i = 0; i < n; i++){
-	        	ArrayList<String> pre = new ArrayList<String>();
-	        	ArrayList<String> st = new ArrayList<String>();
-	        	pre.addAll(prefix);
-	        	pre.add(str.get(i));
-	        	st.addAll(str.subList(0, i));
-	        	st.addAll(str.subList(i+1, n));
-	        	permutation(pre , st);
-	        }
-	            
-	    }
+		UIUtil.updateOutput("Operation took "+((stopTime-startTime)+" milliseconds"));
+		UIUtil.updateOutput("Operation ended " + stopTime + " milliseconds after the epoch");
 	}
 	
 	public static Chromosome runAeon(ArrayList<Chromosome> population, int ae)
 	{
-		int k = 0;
 		int i = 0;
 		String prev = "";
-		while (i < GENERATIONS_NO_CHANGE) { 
+		while (i < SAS.GENERATIONS_NO_CHANGE) { 
 			//System.out.print("[AEON "+ae+"][no change for " + i + " generations] gen: " + k);
-			//ScrollPaneUtil.updateOutput("[AEON "+ae+"][no change for " + i + " generations] gen: " + k);
+			//if(SAS.DYNAMIC_POPULATION_SIZE > 100 && i > 0) SAS.DYNAMIC_POPULATION_SIZE-=2;
 			Collections.sort(population);
-
 			ArrayList<Chromosome> temp = new ArrayList<Chromosome>();
-			temp.addAll(population.subList(0, ELITES));
+			temp.addAll(population.subList(0, SAS.ELITES));
 			int pn = 0;
-			while (temp.size() < POPULATION_SIZE) {
-				if (Math.random() < CROSSOVER_CHANCE && pn < (POPULATION_SIZE / 2) - 2) {
-					ArrayList<Chromosome> parents = new ArrayList<Chromosome>();
+			while (temp.size() < SAS.DYNAMIC_POPULATION_SIZE) {
+				if (Math.random() < SAS.CROSSOVER_CHANCE && pn < (SAS.POPULATION_SIZE) - 2) {
+					List<Chromosome> parents = population.subList(pn, pn+2);
 					ArrayList<Chromosome> children = new ArrayList<Chromosome>();
-					parents.add(population.get(pn));
-					parents.add(population.get(pn + 1));
 					children.addAll(haveSex(parents));
 					for (int j = 0; j < children.size(); j++) {
-						if (Math.random() < MUTATION_CHANCE) {
+						if (Math.random() < SAS.MUTATION_CHANCE) {
 							children.add(mutate(children.get(j)));
 							children.remove(j);
 						}
@@ -160,34 +109,33 @@ public class SeatAStudent {
 					temp.addAll(children);
 					pn += 2;
 				} 
-				else if (Math.random() < MUTATION_CHANCE) {
+				else if (Math.random() < SAS.MUTATION_CHANCE) {
 						temp.add(mutate(population.get(pn)));
 						pn++;
 				}
-				if (pn >= POPULATION_SIZE / 2)
+				if (pn >= SAS.POPULATION_SIZE / 2)
 					pn = 0;
 			}
 			population.clear();
 			population.addAll(temp);
 			//System.out.println(population.get(0).getGenes().toString() + " fitness: " + population.get(0).getFitnessScore());
-			//ScrollPaneUtil.updateOutput(population.get(0).getGenes().toString() + " fitness: " + population.get(0).getFitnessScore());
 			if (!prev.equals(population.get(0).getGenes().toString()))
 				i = 0;
 			else
 				i++;
 			prev = population.get(0).getGenes().toString();
-			k++;
 		}
 		return population.get(0);
 	}
 	
 	public static void initGraphs(){
 		
-		// FILL DESIRED V2
+		//FILL DESIRED GRAPH/MAP
 		desired = new Graph<String>();
+		strToVertDesired = new HashMap<String, Vertex<String>>();
 		ArrayList<String> studentsInClass = new ArrayList<String>();
 		try {
-			Scanner file = new Scanner(new File(STUDENTS_FNAME));
+			Scanner file = new Scanner(new File(SAS.STUDENTS_FNAME));
 			while (file.hasNextLine()) {
 				String student = file.nextLine();
 				studentsInClass.add(student);
@@ -195,12 +143,16 @@ public class SeatAStudent {
 			file.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			UIUtil.showOutput("Error! Couldn't find the file \""+SAS.STUDENTS_FNAME+"\" Perhaps you forgot\nthe extension or the file name is incorrect.");
+			System.exit(0);
 		}
 		System.out.println(studentsInClass);
 		
 		for(String str : studentsInClass)
 		{
-			desired.addVertex(new Vertex<String>(str));
+			Vertex<String> v = new Vertex<String>(str);
+			strToVertDesired.put(str, v);
+			desired.addVertex(v);
 		}
 		for(Vertex<String> str : desired.getAllVerticies())
 		{
@@ -209,7 +161,6 @@ public class SeatAStudent {
 				Scanner file = new Scanner(new File(str.getData()+".txt"));
 				while (file.hasNextLine()) {
 					String s = file.nextLine();
-					//System.out.println(s);
 					s = s.replaceAll(" ", "");
 					if(s.equals(""))
 					{
@@ -225,7 +176,10 @@ public class SeatAStudent {
 						case(1): /*do nothing*/ ;break;
 						case(2): desired.addEdge(new Edge<String>(str, new Vertex<String>(s), 0));break;
 						case(3): str.addNotNextTo(s);break;
-						//case(4): Window Seat
+						case(4): 
+							if(s.toLowerCase().equals("yes") || s.toLowerCase().equals("y")) str.setPref(1);
+							else if(s.toLowerCase().equals("no") || s.toLowerCase().equals("n")) str.setPref(2);
+							else str.setPref(0); break;
 						default: System.out.println("BROOOO -.-");
 						}
 					}
@@ -236,10 +190,11 @@ public class SeatAStudent {
 			}
 		}
 		
-		// Fill TARGET
+		// Fill TARGET GRAPH/MAP
 		target = new Graph<Integer>();
+		vertToIntTarget = new HashMap<Vertex<Integer>, Integer>();
 		try {
-			Scanner file = new Scanner(new File(CHART_FNAME));
+			Scanner file = new Scanner(new File(SAS.CHART_FNAME));
 			while (file.hasNextLine()) {
 				try {
 					String nums = file.nextLine();
@@ -248,6 +203,7 @@ public class SeatAStudent {
 					Vertex<Integer> prev = null;
 					for (int i = 0; i < verticies.length; i++) {
 						v = new Vertex<Integer>(Integer.parseInt(verticies[i]));
+						vertToIntTarget.put(v, Integer.parseInt(verticies[i]));
 						target.addVertex(v);
 						if (i > 0) {
 							target.addEdge(new Edge<Integer>(prev, v, 1));
@@ -256,16 +212,33 @@ public class SeatAStudent {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
+					UIUtil.showOutput("Fatal Error, is "+SAS.CHART_FNAME+" the correct name of the file?\nIf not change the name in config.txt.");
+					System.exit(0);
 				}
 			}
 			file.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//SUB CHART GRAPH
+		
+		//Account for empty seats 
+		System.out.println(target.size());
+		System.out.println(desired.size());
+		int amt2Add = target.size()-desired.size();
+		if(target.size() > desired.size()){
+			for(int i = 0; i < amt2Add; i++)
+			{
+				String str = "EmptySeat"+(i+1);
+				Vertex<String> v = new Vertex<String>(str);
+				strToVertDesired.put(str, v);
+				desired.addVertex(v);
+			}
+		}
+		
+		//FILL SUB CHART GRAPH
 		subGraphs = new Graph<String>();
 		try {
-			Scanner file = new Scanner(new File(SUBGROUP_GRAPH_FNAME));
+			Scanner file = new Scanner(new File(SAS.SUBGROUP_GRAPH_FNAME));
 			while (file.hasNextLine()) {
 				try {
 					String groups = file.nextLine();
@@ -284,6 +257,8 @@ public class SeatAStudent {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
+					UIUtil.showOutput("Fatal Error, is "+SAS.SUBGROUP_GRAPH_FNAME+" the correct name of the file?\nIf not change the name in config.txt.");
+					System.exit(0);
 				}
 
 			}
@@ -292,11 +267,11 @@ public class SeatAStudent {
 			e.printStackTrace();
 		}
 		
-		//SUB GROUP MAP g->i
+		//INIT SUB GROUP MAPS
 		groupToIndexArr = new HashMap<String, String[]>();
 		indexToGroup = new HashMap<Integer, String>();
 		try {
-			Scanner file = new Scanner(new File(SUBGROUP_FNAME));
+			Scanner file = new Scanner(new File(SAS.SUBGROUP_FNAME));
 			while (file.hasNextLine()) {
 				try {
 					String groups = file.nextLine();
@@ -307,13 +282,15 @@ public class SeatAStudent {
 						for(int i = 1; i < readIn.length; i++)
 						{
 							seats[i-1] = readIn[i];
-							indexToGroup.put(Integer.parseInt(readIn[i]), readIn[0]);
+							indexToGroup.put(Integer.parseInt(readIn[i])-1, readIn[0]);
 						}
 						groupToIndexArr.put(readIn[0], seats);
 					}
 					
 				} catch (Exception e) {
 					e.printStackTrace();
+					UIUtil.showOutput("Fatal Error, is "+SAS.SUBGROUP_FNAME+" the correct name of the file?\nIf not change the name in config.txt.");
+					System.exit(0);
 				}
 			}
 			file.close();
@@ -321,11 +298,12 @@ public class SeatAStudent {
 			e.printStackTrace();
 		}
 		
-		
+		//FILL ADJACENCY LISTS
 		target.setNeighbors();
 		desired.setNeighbors();
 		subGraphs.setNeighbors();
 		
+		//SYSO
 		System.out.println(target);
 		System.out.println(desired);
 		System.out.println(subGraphs);
@@ -336,7 +314,7 @@ public class SeatAStudent {
 	public static ArrayList<Chromosome> initPopulation(String[] students)
 	{
 		ArrayList<Chromosome> pop = new ArrayList<Chromosome>();
-		for(int i = 0; i < POPULATION_SIZE; i++)
+		for(int i = 0; i < SAS.POPULATION_SIZE; i++)
 		{
 			ArrayList<String> genes = new ArrayList<String>();
 			for(int j = 0; j < students.length; j++)
@@ -344,13 +322,15 @@ public class SeatAStudent {
 				genes.add(students[j]);
 			}
 			ArrayList<String> newChromo = new ArrayList<String>();
+			HashMap<String, Integer> indexMap = new HashMap<String, Integer>();
 			while(!genes.isEmpty())
 			{
 				int index = (int)(Math.random()*genes.size());
 				newChromo.add(genes.get(index));
+				indexMap.put(genes.get(index), index);
 				genes.remove(index);
 			}
-			pop.add(new Chromosome(newChromo));
+			pop.add(new Chromosome(newChromo, indexMap));
 			
 		}
 		return pop;
@@ -364,19 +344,23 @@ public class SeatAStudent {
 		}while(n1 == n2);
 		String s1 = c.getGenes().get(n1);
 		String s2 = c.getGenes().get(n2);
-		ArrayList<String> retArrL = new ArrayList<String>();
-		retArrL.addAll(c.getGenes());
-		retArrL.set(n1, s2);
-		retArrL.set(n2, s1);
-		return new Chromosome(retArrL);
+		ArrayList<String> retChromo = new ArrayList<String>();
+		HashMap<String, Integer> indexMap = (HashMap)c.getIndexMap().clone();
+		retChromo.addAll(c.getGenes());
+		retChromo.set(n1, s2);
+		retChromo.set(n2, s1);
+		indexMap.put(s1, n2);
+		indexMap.put(s2, n1);
+		return new Chromosome(retChromo, indexMap);
 	}
 	
-	public static ArrayList<Chromosome> haveSex(ArrayList<Chromosome> parents)
+	public static ArrayList<Chromosome> haveSex(List<Chromosome> parents)
 	{
-		ArrayList<String> p1 = new ArrayList<String>();
-		ArrayList<String> p2 = new ArrayList<String>();
-		p1.addAll(parents.get(0).getGenes());
-		p2.addAll(parents.get(1).getGenes());
+		ArrayList<String> p1 = (ArrayList<String>)parents.get(0).getGenes().clone();
+		ArrayList<String> p2 = (ArrayList<String>)parents.get(1).getGenes().clone();
+		HashMap<String, Integer> pM1 = (HashMap<String, Integer>)parents.get(0).getIndexMap().clone();
+		HashMap<String, Integer> pM2 = (HashMap<String, Integer>)parents.get(1).getIndexMap().clone();
+		
 		ArrayList<Chromosome> children = new ArrayList<Chromosome>();
 		int n1 = (int)(Math.random()*p1.size());
 		int n2;
@@ -389,37 +373,35 @@ public class SeatAStudent {
 			ArrayList<String> sub2 = new ArrayList<String>();
 			sub1.addAll(p1.subList(n1, n2));
 			sub2.addAll(p2.subList(n1, n2));
-			ArrayList<String> c1 = new ArrayList<String>();
-			ArrayList<String> c2 = new ArrayList<String>();
-			c1.addAll(buildChild(p1, sub2, n1));
-			c2.addAll(buildChild(p2, sub1, n1));
-			children.add(new Chromosome(c1));
-			children.add(new Chromosome(c2));
+			children.add(buildChild(p1, pM1, sub2, n1, n2));
+			children.add(buildChild(p2, pM2, sub1, n1, n2));
 		}
 		else{
 			ArrayList<String> sub1 = new ArrayList<String>();
 			ArrayList<String> sub2 = new ArrayList<String>();
 			sub1.addAll(p1.subList(n2, n1));
 			sub2.addAll(p2.subList(n2, n1));
-			ArrayList<String> c1 = new ArrayList<String>();
-			ArrayList<String> c2 = new ArrayList<String>();
-			c1.addAll(buildChild(p1, sub2, n2));
-			c2.addAll(buildChild(p2, sub1, n2));
-			children.add(new Chromosome(c1));
-			children.add(new Chromosome(c2));
+			children.add(buildChild(p1, pM1, sub2, n2, n1));
+			children.add(buildChild(p2, pM2, sub1, n2, n1));
 		}
 		return children;
 	}
-	
-	public static ArrayList<String> buildChild(ArrayList<String> scanThru, ArrayList<String> subList, int start){
+	//start inclusive stop exclusive
+	public static Chromosome buildChild(ArrayList<String> scanThru, HashMap<String, Integer> scanThruMap, ArrayList<String> subList, int start, int stop){
 		for(int i = 0; i < subList.size(); i++)
 		{
 			scanThru.remove(scanThru.indexOf(subList.get(i)));
+			
 		}
 		ArrayList<String> retList = new ArrayList<String>();
 		retList.addAll(scanThru.subList(0, start));
 		retList.addAll(subList);
 		retList.addAll(scanThru.subList(start, scanThru.size()));
-		return retList;
+		for(int i = 0; i < retList.size(); i++)
+		{
+			if(i == start) i += (stop-start);
+			scanThruMap.put(retList.get(i), i);
+		}
+		return new Chromosome(retList, scanThruMap);
 	}
 }

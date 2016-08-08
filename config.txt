@@ -1,0 +1,74 @@
+#Seat a Student Settings:
+
+AEONS "5"
+#An aeon is defined as being a random generation of
+#individuals evolving until a plateau is reached
+
+POPULATION_SIZE "800"
+#The number of individuals(solutions) in the population
+
+GENERATIONS_NO_CHANGE "400"
+#How many generations long the plateau(mentioned earlier) is
+
+MUTATION_CHANCE "0.85"
+#Chance for an individuals genes to get mutated
+
+CROSSOVER_CHANCE "0.85"
+#Chance for an individual to mate with another
+
+ELITES "2"
+#Number of elite(most fit) individuals allowed
+#to live on to the next generation
+
+CHART_FNAME "chart.txt"
+#Name of the file containing a listing of what 
+#seats are next to each other in the classroom
+
+SUBGROUP_FNAME "subchart.txt"
+#Name of the file containing a listing of what 
+#seats are grouped together in the classroom
+
+SUBGROUP_GRAPH_FNAME "subchart_graph.txt"
+#Name of the file containing a listing of what 
+#subgroups are next to each other in the classroom
+
+DONT_LET_THESE_PEOPLE_BE_TOGETHER_FNAME "dltpbt.txt"
+#Treat these sets of people like they are enemies
+#(Good for naughty mean students who need to suffer)
+
+#Fitness Function Weights:
+
+NEXT_TO_FRIEND "1"
+#Amount added to fitness if next to a friend
+
+NEXT_TO_2WFRIEND "2"
+#Amount added to fitness if next to friend who also
+#wants to sit next to the person in question
+
+NO_PREF "2"
+#Amount added to fitness if person has no prefrence
+
+NOT_NO_PREF "4"
+#Amount subtracted from fitness if person had 
+#prefrence(s) and none are fullfilled
+
+SAME_GROUP_AS_ENEMY "8"
+#Amount subtracted from fitness if person is in same
+#subgroup as someone they don't want to sit next to
+
+NEXT_GROUP_HAS_ENEMY "2"
+#Amount subtracted from fitness if person is next to
+#a subgroup with someone they don't want to sit next to
+
+PREF_GROUP "F"
+#A Group where students can choose whether or not they
+#want to sit in these particular seats/ section of classroom or not
+#Put a pound sign in front of PREF_GROUP if you don't have one
+
+IN_WANT_GROUP "2"
+#Amount subtracted if a person is in a section of the classroom they don't
+#want to be in (useful for avoiding chilly windows)
+
+IN_NOT_WANT_GROUP "2"
+#Amount added if a person is in a section of the classroom they want to be in
+#(good for students who want to sit closer to front of classroom)
