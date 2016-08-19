@@ -9,16 +9,6 @@ import javax.swing.JOptionPane;
 
 public class SeatAStudent {
 			
-	//public static final int SAS.POPULATION_SIZE = 400;
-	//public static final int SAS.GENERATIONS_NO_CHANGE = 200;
-	//public static final double SAS.MUTATION_CHANCE = 0.8;
-	//public static final double SAS.CROSSOVER_CHANCE = 0.8;
-	//public static final int SAS.ELITES = 2;
-	//public static final int SAS.AEONS = 5;
-	//public static final String SAS.CHART_FNAME = "chart.txt";
-	//public static final String SAS.STUDENTS_FNAME = "students.txt";
-	//public static final String SAS.SUBGROUP_FNAME = "subchart.txt";
-	//public static final String SAS.SUBGROUP_GRAPH_FNAME = "subchart_graph.txt";
 	
 	public static Graph<String> desired;
 	public static Graph<Integer> target;
@@ -38,7 +28,8 @@ public class SeatAStudent {
 		UIUtil.createUI();
 		UIUtil.updateOutput("[000ms]: Operation started "+startTime+" milliseconds after the epoch.");
 		ArrayList<Chromosome> bestODaBest = new ArrayList<Chromosome>();
-		UIUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: Initializing graphs, maps, and config");
+		UIUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: "
+				+ "Initializing graphs, maps, and config");
 		SAS.readInAndInitConfig();
 		initGraphs();
 		String[] students = new String[desired.getAllVerticies().size()];
@@ -64,12 +55,14 @@ public class SeatAStudent {
 		
 		System.out.println(bestODaBest.get(0).getGenes().toString()+" fitness: "+ bestODaBest.get(0).
 				getFitnessScore());
-		System.out.println("[OUTCOME]: "+FitnessUtil.getSubScoreArrayList(bestODaBest.get(0).getGenes(), bestODaBest.get(0).getIndexMap()));
+		System.out.println("[OUTCOME]: "+FitnessUtil.getSubScoreArrayList(bestODaBest.get(0).getGenes(), 
+				bestODaBest.get(0).getIndexMap()));
 		
 		UIUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: Here's the best result I could find: \n"
 				+bestODaBest.get(0).getGenes().toString());
 		UIUtil.updateOutput("Fitness Info:");
-		UIUtil.updateOutput(FitnessUtil.getSubScoreArrayList(bestODaBest.get(0).getGenes(), bestODaBest.get(0).getIndexMap()).toString());
+		UIUtil.updateOutput(FitnessUtil.getSubScoreArrayList(bestODaBest.get(0).getGenes(), bestODaBest.
+				get(0).getIndexMap()).toString());
 		UIUtil.updateOutput("[Final Fitness Score]: "+ bestODaBest.get(0).getFitnessScore()+"\n");
 		
 		UIUtil.updateOutput("Seating chart for "+SAS.STUDENTS_FNAME+":");
@@ -118,7 +111,8 @@ public class SeatAStudent {
 			}
 			population.clear();
 			population.addAll(temp);
-			//System.out.println(population.get(0).getGenes().toString() + " fitness: " + population.get(0).getFitnessScore());
+			//System.out.println(population.get(0).getGenes().toString() + " fitness: " + 
+			//population.get(0).getFitnessScore());
 			if (!prev.equals(population.get(0).getGenes().toString()))
 				i = 0;
 			else
@@ -143,7 +137,8 @@ public class SeatAStudent {
 			file.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			UIUtil.showOutput("Error! Couldn't find the file \""+SAS.STUDENTS_FNAME+"\" Perhaps you forgot\nthe extension or the file name is incorrect.");
+			UIUtil.showOutput("Error! Couldn't find the file \""+SAS.STUDENTS_FNAME+
+					"\" Perhaps you forgot\nthe extension or the file name is incorrect.");
 			System.exit(0);
 		}
 		System.out.println(studentsInClass);
@@ -212,7 +207,8 @@ public class SeatAStudent {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					UIUtil.showOutput("Fatal Error, is "+SAS.CHART_FNAME+" the correct name of the file?\nIf not change the name in config.txt.");
+					UIUtil.showOutput("Fatal Error, is "+SAS.CHART_FNAME+
+							" the correct name of the file?\nIf not change the name in config.txt.");
 					System.exit(0);
 				}
 			}
@@ -253,11 +249,13 @@ public class SeatAStudent {
 					if(groups.length() >= 2)
 					for(int i = 1; i < groups.length(); i++)
 					{
-						subGraphs.addEdge(new Edge<String>(new Vertex<String>(groups.charAt(0)+""), new Vertex<String>(groups.charAt(i)+""), 0));
+						subGraphs.addEdge(new Edge<String>(new Vertex<String>(groups.charAt(0)+""), 
+								new Vertex<String>(groups.charAt(i)+""), 0));
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					UIUtil.showOutput("Fatal Error, is "+SAS.SUBGROUP_GRAPH_FNAME+" the correct name of the file?\nIf not change the name in config.txt.");
+					UIUtil.showOutput("Fatal Error, is "+SAS.SUBGROUP_GRAPH_FNAME+
+							" the correct name of the file?\nIf not change the name in config.txt.");
 					System.exit(0);
 				}
 
@@ -289,7 +287,8 @@ public class SeatAStudent {
 					
 				} catch (Exception e) {
 					e.printStackTrace();
-					UIUtil.showOutput("Fatal Error, is "+SAS.SUBGROUP_FNAME+" the correct name of the file?\nIf not change the name in config.txt.");
+					UIUtil.showOutput("Fatal Error, is "+SAS.SUBGROUP_FNAME+
+							" the correct name of the file?\nIf not change the name in config.txt.");
 					System.exit(0);
 				}
 			}
@@ -388,7 +387,10 @@ public class SeatAStudent {
 		return children;
 	}
 	//start inclusive stop exclusive
-	public static Chromosome buildChild(ArrayList<String> scanThru, HashMap<String, Integer> scanThruMap, ArrayList<String> subList, int start, int stop){
+	public static Chromosome buildChild(
+			ArrayList<String> scanThru, 
+			HashMap<String, Integer> scanThruMap, 
+			ArrayList<String> subList, int start, int stop){
 		for(int i = 0; i < subList.size(); i++)
 		{
 			scanThru.remove(scanThru.indexOf(subList.get(i)));

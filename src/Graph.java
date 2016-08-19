@@ -141,11 +141,13 @@ public class Graph<T>{
 			boolean addEdgeOk = true;
 			for(Edge<T> ed : this.edges)
 			{
-				if(ed.getVerticies().get(0).equals(e.getVerticies().get(0)) && ed.getVerticies().get(1).equals(e.getVerticies().get(1)))
+				if(ed.getVerticies().get(0).equals(e.getVerticies().get(0)) && ed.getVerticies().get(1)
+						.equals(e.getVerticies().get(1)))
 				{
 					throw new IllegalArgumentException("Duplicate Edge");
 				}
-				else if(ed.getVerticies().get(0).equals(e.getVerticies().get(1)) && ed.getVerticies().get(1).equals(e.getVerticies().get(0)))
+				else if(ed.getVerticies().get(0).equals(e.getVerticies().get(1)) && ed.getVerticies().get(1)
+						.equals(e.getVerticies().get(0)))
 				{
 					ed.setWeight(ed.getWeight()+1);
 					addEdgeOk = false;
