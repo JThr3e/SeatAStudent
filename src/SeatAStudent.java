@@ -37,6 +37,7 @@ public class SeatAStudent {
 			students[i] = desired.getAllVerticies2FindNeighbors().get(i).getData()+"";
 		}
 		UIUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: done");
+		UIUtil.joke(startTime);
 		UIUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: Beginning evolutionary simulation"
 				+ "(This takes a while)...");
 		for(int ae = 0; ae < SAS.EPOCHS; ae++)

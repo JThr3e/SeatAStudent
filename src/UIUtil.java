@@ -76,4 +76,22 @@ public class UIUtil {
 	{
 		JOptionPane.showMessageDialog(null, str);
 	}
+	
+	public static void joke(long startTime)
+	{
+		String joke = "";
+		int i = (int)Math.random()*10;
+		switch(i){
+		case(0): joke = "42"; break;
+		case(1): joke = "Hi I'm JThr3e, the friendly AI"; break;
+		case(2): joke = "Steel Ppl"; break;
+		case(3): joke = "Please don't hate me, I'm not perfect. ;("; break;
+		case(4): joke = ";)"; break;
+		case(5): joke = "WARNING: **Explodes when divided by zero**"; break;
+		case(7): joke = "At least I'm better than O(n!)"; break;
+		case(8): joke = "Does P=NP yet?"; break;
+		case(9): joke = "(╯°□°）╯︵ ┻━┻"; break;
+		}
+		showOutput("["+(System.currentTimeMillis()-startTime)+"ms]: "+joke);
+	}
 }
