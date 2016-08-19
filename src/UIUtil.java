@@ -91,6 +91,7 @@ public class UIUtil {
 		case(7): joke = "At least I'm better than O(n!)"; break;
 		case(8): joke = "Does P=NP yet?"; break;
 		case(9): joke = "(╯°□°）╯︵ ┻━┻"; break;
+		default: joke = "Why?"; break;
 		}
 		updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: "+joke);
 	}
