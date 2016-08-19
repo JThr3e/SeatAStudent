@@ -42,12 +42,12 @@ public class SeatAStudent {
 				+ "(This takes a while)...");
 		for(int ae = 0; ae < SAS.EPOCHS; ae++)
 		{
-			Chromosome c = runAeon(initPopulation(students), ae);
+			Chromosome c = runEpoch(initPopulation(students), ae);
 			System.out.println("[EPOCH "+(ae+1)+"]: [Fitness: " + c.getFitnessScore()+"], "+
 					c.getGenes().toString());
 			System.out.println(FitnessUtil.getSubScoreArrayList(c.getGenes(), c.getIndexMap()));
 			System.out.println();
-			UIUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: [AEON "+(ae+1)+
+			UIUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: [EPOCH "+(ae+1)+
 					"]~~~[Fitness: " + c.getFitnessScore()+"]:\n"+c.getGenes().toString());
 			UIUtil.updateOutput(FitnessUtil.getSubScoreArrayList(c.getGenes(), c.getIndexMap()).toString()+"\n");
 			bestODaBest.add(c);
@@ -78,12 +78,12 @@ public class SeatAStudent {
 		UIUtil.updateOutput("Operation ended " + stopTime + " milliseconds after the epoch");
 	}
 	
-	public static Chromosome runAeon(ArrayList<Chromosome> population, int ae)
+	public static Chromosome runEpoch(ArrayList<Chromosome> population, int ae)
 	{
 		int i = 0;
 		String prev = "";
 		while (i < SAS.GENERATIONS_NO_CHANGE) { 
-			//System.out.print("[AEON "+ae+"][no change for " + i + " generations] gen: " + k);
+			//System.out.print("[EPOCH "+ae+"][no change for " + i + " generations] gen: " + k);
 			//if(SAS.DYNAMIC_POPULATION_SIZE > 100 && i > 0) SAS.DYNAMIC_POPULATION_SIZE-=2;
 			Collections.sort(population);
 			ArrayList<Chromosome> temp = new ArrayList<Chromosome>();
@@ -182,6 +182,7 @@ public class SeatAStudent {
 				}
 				file.close();
 			} catch (Exception e) {
+				UIUtil.updateOutput("[WARNING]: Error with "+str.getData()+".txt"+". File might be erroneous or may not exsist.");
 				e.printStackTrace();
 			}
 		}
@@ -208,14 +209,16 @@ public class SeatAStudent {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					UIUtil.showOutput("Fatal Error, is "+SAS.CHART_FNAME+
-							" the correct name of the file?\nIf not change the name in config.txt.");
+					UIUtil.showOutput(" Error, Check file format of "+ SAS.CHART_FNAME);
 					System.exit(0);
 				}
 			}
 			file.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			UIUtil.showOutput(" Error, is "+SAS.CHART_FNAME+
+					" missing? Is that the correct name of the file?\nIf not change the name in config.txt.");
+			System.exit(0);
 		}
 		
 		//Account for empty seats 
@@ -255,8 +258,7 @@ public class SeatAStudent {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					UIUtil.showOutput("Fatal Error, is "+SAS.SUBGROUP_GRAPH_FNAME+
-							" the correct name of the file?\nIf not change the name in config.txt.");
+					UIUtil.showOutput(" Error, Check file format of "+SAS.SUBGROUP_GRAPH_FNAME);
 					System.exit(0);
 				}
 
@@ -264,6 +266,9 @@ public class SeatAStudent {
 			file.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			UIUtil.showOutput(" Error, is "+SAS.SUBGROUP_GRAPH_FNAME+
+					" missing? Is that the correct name of the file?\nIf not change the name in config.txt.");
+			System.exit(0);
 		}
 		
 		//INIT SUB GROUP MAPS
@@ -288,14 +293,16 @@ public class SeatAStudent {
 					
 				} catch (Exception e) {
 					e.printStackTrace();
-					UIUtil.showOutput("Fatal Error, is "+SAS.SUBGROUP_FNAME+
-							" the correct name of the file?\nIf not change the name in config.txt.");
+					UIUtil.showOutput(" Error, Check file format of "+SAS.SUBGROUP_FNAME);
 					System.exit(0);
 				}
 			}
 			file.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			UIUtil.showOutput(" Error, is "+SAS.SUBGROUP_FNAME+
+					" missing? Is that the correct name of the file?\nIf not change the name in config.txt.");
+			System.exit(0);
 		}
 		
 		//FILL ADJACENCY LISTS

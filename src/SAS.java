@@ -143,7 +143,7 @@ public class SAS {
 			file.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			UIUtil.showOutput("Fatal Error, config.txt is corrupted or missing!");
+			UIUtil.showOutput("Error!!, config.txt is corrupted or missing!");
 			System.exit(0);
 		}
 	}
