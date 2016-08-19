@@ -1,6 +1,6 @@
 #Seat a Student Settings:
 
-AEONS "5"
+EPOCHS "5"
 #An aeon is defined as being a random generation of
 #individuals evolving until a plateau is reached
 

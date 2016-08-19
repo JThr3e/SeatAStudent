@@ -11,7 +11,7 @@ public class SAS {
 	public static double MUTATION_CHANCE = 0.8;
 	public static double CROSSOVER_CHANCE = 0.8;
 	public static int ELITES = 2;
-	public static int AEONS = 5;
+	public static int EPOCHS = 5;
 	public static String CHART_FNAME = "chart.txt";
 	public static String STUDENTS_FNAME = "students.txt";
 	public static String SUBGROUP_FNAME = "subchart.txt";
@@ -64,9 +64,9 @@ public class SAS {
 					/*do more nothing*/
 				}
 				else{
-					if(s.contains("AEONS")){
-						AEONS = Integer.parseInt(isolateGoodStuff(s));
-						System.out.println("AEONS");
+					if(s.contains("EPOCHS")){
+						EPOCHS = Integer.parseInt(isolateGoodStuff(s));
+						System.out.println("EPOCHS");
 					}
 					if(s.contains("POPULATION_SIZE")){
 						POPULATION_SIZE  = Integer.parseInt(isolateGoodStuff(s));

@@ -38,7 +38,7 @@ public class UIUtil {
 	{
 		UIManager.put("OptionPane.messageForeground",
 				new Color(74,186,101));
-		UIManager.put("TextField.background", 
+		UIManager.put("TextField.background",
 				new Color(106, 79, 52));
 		UIManager.put("TextField.font", new FontUIResource(new Font
 				("Dialog", Font.ITALIC, 45)));
@@ -50,7 +50,7 @@ public class UIUtil {
 		UIManager.put("Panel.background",new Color(46,112,62));
 		UIManager.put("OptionPane.background",new Color(106,79,52));
 		UIManager.put("Button.background",new Color(74,137,63));
-		UIManager.put("Button.foreground", new Color(72,61,139));	
+		UIManager.put("Button.foreground", new Color(72,61,139));
 	}
 	
 	public static void createUI(){

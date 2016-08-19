@@ -48,10 +48,10 @@ public class SeatAStudent {
 		UIUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: done");
 		UIUtil.updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: Beginning evolutionary simulation"
 				+ "(This takes a while)...");
-		for(int ae = 0; ae < SAS.AEONS; ae++)
+		for(int ae = 0; ae < SAS.EPOCHS; ae++)
 		{
 			Chromosome c = runAeon(initPopulation(students), ae);
-			System.out.println("[AEON "+(ae+1)+"]: [Fitness: " + c.getFitnessScore()+"], "+
+			System.out.println("[EPOCH "+(ae+1)+"]: [Fitness: " + c.getFitnessScore()+"], "+
 					c.getGenes().toString());
 			System.out.println(FitnessUtil.getSubScoreArrayList(c.getGenes(), c.getIndexMap()));
 			System.out.println();
