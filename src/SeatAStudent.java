@@ -93,7 +93,7 @@ public class SeatAStudent {
 				if (Math.random() < SAS.CROSSOVER_CHANCE && pn < (SAS.POPULATION_SIZE) - 2) {
 					List<Chromosome> parents = population.subList(pn, pn+2);
 					ArrayList<Chromosome> children = new ArrayList<Chromosome>();
-					children.addAll(haveSex(parents));
+					children.addAll(crossOver(parents));
 					for (int j = 0; j < children.size(); j++) {
 						if (Math.random() < SAS.MUTATION_CHANCE) {
 							children.add(mutate(children.get(j)));
@@ -362,7 +362,7 @@ public class SeatAStudent {
 	}
 	
 	@SuppressWarnings("unchecked") 
-	public static ArrayList<Chromosome> haveSex(List<Chromosome> parents)
+	public static ArrayList<Chromosome> crossOver(List<Chromosome> parents)
 	{
 		ArrayList<String> p1 = (ArrayList<String>)parents.get(0).getGenes().clone();
 		ArrayList<String> p2 = (ArrayList<String>)parents.get(1).getGenes().clone();

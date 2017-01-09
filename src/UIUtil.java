@@ -80,7 +80,7 @@ public class UIUtil {
 	public static void joke(long startTime)
 	{
 		String joke = "";
-		int i = (int)(Math.random()*10);
+		int i = (int)(Math.random()*13);
 		switch(i){
 		case(0): joke = "42"; break;
 		case(1): joke = "Hi I'm JThr3e, the friendly AI"; break;
@@ -91,6 +91,9 @@ public class UIUtil {
 		case(7): joke = "At least I'm better than O(n!)"; break;
 		case(8): joke = "Does P=NP yet?"; break;
 		case(9): joke = "(╯°□°）╯︵ ┻━┻"; break;
+		case(10): joke = "I'm Sorry Dave, I'm afraid I can't do that."; break;
+		case(11): joke = "There will be cake."; break;
+		case(12): joke = "NO DISSASSEMBLE!!"; break;
 		default: joke = "Why?"; break;
 		}
 		updateOutput("["+(System.currentTimeMillis()-startTime)+"ms]: "+joke);
