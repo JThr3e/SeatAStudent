@@ -60,7 +60,7 @@ NEXT_GROUP_HAS_ENEMY "2"
 #Amount subtracted from fitness if person is next to
 #a subgroup with someone they don't want to sit next to
 
-PREF_GROUP "F"
+PREF_GROUP "B"
 #A Group where students can choose whether or not they
 #want to sit in these particular seats/ section of classroom or not
 #Put a pound sign in front of PREF_GROUP if you don't have one
